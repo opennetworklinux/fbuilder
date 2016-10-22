@@ -119,9 +119,6 @@ RUN echo 'APT::Get::AllowUnauthenticated "true";\nAPT::Get::Assume-Yes "true";' 
         libc6-dev-powerpc-cross \
 	crossbuild-essential-powerpc \
 	cross-gcc-dev \
-	folly-w100 \
-	thrift-w100 \
-	wangle-w100 \
     libdb5.3-dev \
     libnl-3-dev \
     libnl-route-3-dev \
@@ -159,9 +156,15 @@ RUN mv /external /fboss
 RUN cd /fboss/external/fbthrift
 COPY deps_common.sh /fboss/external/fbthrift/thrift/build/deps_common.sh
 COPY deps_debian8.sh /fboss/external/fbthrift/thrift/build/deps_debian8.sh
-COPY finish.sh /fboss/finish.sh
-RUN cd /fboss/external/fbthrift
+RUN wget http://opennetlinux.org/tarballs/boost-build_1.59.0_amd64.deb
+RUN dpkg -i boost-build_1.59.0_amd64.deb
 RUN apt-get install python-dev libpcap-dev libusb-dev cmake
-RUN cd/ fboss/external; wget http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.bz2; bzip2 -dc boost_1_59_0.tar.bz2 | tar xf -
-RUN rm /boost_1_59_0.tar.bz2
-RUN cd /boost_1_59_0; ./bootstrap.sh --prefix=/usr/local --with-libraries=all --libdir=/usr/local/lib --includedir=/usr/local/include
+RUN cd /fboss/external/fbthrift ; thrift/build/deps_debian8.sh ; thrift/build/travis/install.sh
+RUN cp -av /fboss/external/fbthrift/thrift/build/deps/wangle /fboss/external
+RUN mkdir -p /fboss/packages
+RUN mkdir -p /fboss/external/installed/wangle
+RUN cd /fboss/external/fbthrift/thrift/build/deps/wangle/wangle ; export DESTDIR=/fboss/external/installed/wangle ; make install ; cd /fboss/packages;  fpm -s dir -t deb -n wangle -v 13.0.0 -C /fboss/external/installed/wangle
+RUN cp -av /fboss/external/fbthrift/thrift/build/deps/folly /fboss/external
+RUN mkdir -p /fboss/external/installed/folly
+RUN cd /fboss/external/fbthrift/thrift/build/deps/folly/folly ; export DESTDIR=/fboss/external/installed/folly ; make install ; cd /fboss/packages;  fpm -s dir -t deb -n folly -v 57.0.0 -C /fboss/external/installed/folly
+RUN mkdir -p /fboss/build ; cd /fboss/build; cmake .. ; make

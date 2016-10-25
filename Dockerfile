@@ -1,4 +1,4 @@
-FROM opennetworklinux/builder8:1.0
+FROM sonn/fbuilderbase:1.0
 MAINTAINER Steve Noble <steven.noble@bigswitch.com>
 
 # Add the opennetlinux.org apt repository so we can get boost and other packages from it. 

@@ -5,13 +5,6 @@ MAINTAINER Steve Noble <steven.noble@bigswitch.com>
 # Clone and build fbthrift + dependencies and FBOSS
 #
 
-RUN mv /external /fboss
-RUN cd /fboss/external/fbthrift
-COPY deps_common.sh /fboss/external/fbthrift/thrift/build/deps_common.sh
-COPY deps_debian8.sh /fboss/external/fbthrift/thrift/build/deps_debian8.sh
-RUN wget http://opennetlinux.org/tarballs/boost-build_1.59.0_amd64.deb
-RUN dpkg -i boost-build_1.59.0_amd64.deb
-RUN apt-get install python-dev libpcap-dev libusb-dev cmake
 RUN cd /fboss/external/fbthrift ; thrift/build/deps_debian8.sh ; thrift/build/travis/install.sh
 RUN cp -a /fboss/external/fbthrift/thrift/build/deps/wangle /fboss/external
 RUN mkdir -p /fboss/packages

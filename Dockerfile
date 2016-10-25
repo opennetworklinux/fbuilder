@@ -1,13 +1,10 @@
-FROM sonn/fbuilderbase:1.0
+FROM sonn/fbuilderbase:1.1
 MAINTAINER Steve Noble <steven.noble@bigswitch.com>
 
 #
 # Clone and build fbthrift + dependencies and FBOSS
 #
-RUN git clone https://github.com/facebook/fboss.git
-RUN cd /fboss
-COPY getdeps.sh /fboss/getdeps.sh
-RUN /fboss/getdeps.sh
+
 RUN mv /external /fboss
 RUN cd /fboss/external/fbthrift
 COPY deps_common.sh /fboss/external/fbthrift/thrift/build/deps_common.sh

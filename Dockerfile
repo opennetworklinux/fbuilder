@@ -1,18 +1,6 @@
 FROM sonn/fbuilderbase:1.0
 MAINTAINER Steve Noble <steven.noble@bigswitch.com>
 
-# Add the opennetlinux.org apt repository so we can get boost and other packages from it. 
-
-RUN echo 'APT::Get::AllowUnauthenticated "true";\nAPT::Get::Assume-Yes "true";' | tee /etc/apt/apt.conf.d/99opennetworklinux && \
-    echo "deb http://apt.opennetlinux.org/debian/ unstable main" | tee /etc/apt/sources.list.d/opennetlinux.list && \
-    apt-get update && \
-    apt-get install -y  \
-    libdb5.3-dev \
-    libnl-3-dev \
-    libnl-route-3-dev \
-    libusb-dev \
-    scons
-
 #
 # Clone and build fbthrift + dependencies and FBOSS
 #
